@@ -38,14 +38,11 @@ public class AllinOneFragment extends Fragment {
     private RecyclerView mRecyclerView;
     public List<Neighbour> mNeighbours = new ArrayList<>();
     public static final String BOOL = "bool";
-    boolean isBool;
+    boolean isBool = true;
 
-    public static AllinOneFragment newInstance(List<Neighbour> theList) {
+    public static AllinOneFragment newInstance(boolean bool) {
         AllinOneFragment fragment = new AllinOneFragment();
-        /*Bundle bd =  new Bundle();
-        bd.putBoolean(BOOL, whichTab);
-        fragment.setArguments(bd);*/
-        fragment.mNeighbours = theList;
+        fragment.isBool = bool;
         return fragment;
     }
 
@@ -53,10 +50,6 @@ public class AllinOneFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApiService = DI.getNeighbourApiService();
-        /*if (getArguments() != null) {
-            isBool = getArguments().getBoolean(BOOL);
-        }*/
-        initList(mNeighbours);
     }
 
     @Override
@@ -67,23 +60,24 @@ public class AllinOneFragment extends Fragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        initList();
         return view;
     }
 
     /**
      * Init the List of neighbours depending on boolean variable getWhichTab
      */
-    private void initList(List<Neighbour> aList) {
-        /*if (bool)
-            mNeighbours = mApiService.getFavoriteNeighbours();
+    private void initList() {
+        if(!isBool)
+            mNeighbours = mApiService.getNeighbours();
         else
-            mNeighbours = mApiService.getNeighbours();*/
-        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(aList, isBool));
+            mNeighbours = mApiService.getFavoriteNeighbours();
+        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours, isBool));
     }
 
     @Override
     public void onResume() {
-        initList(mNeighbours);
+        initList();
         super.onResume();
     }
 
@@ -105,9 +99,7 @@ public class AllinOneFragment extends Fragment {
      */
     @Subscribe
     public void onDeleteNeighbour(DeleteNeighbourEvent event) {
-        if(isBool) {
-            mApiService.deleteNeighbour(event.neighbour);
-            initList(mNeighbours);
-        }
+        mApiService.deleteNeighbour(event.neighbour);
+        initList();
     }
 }

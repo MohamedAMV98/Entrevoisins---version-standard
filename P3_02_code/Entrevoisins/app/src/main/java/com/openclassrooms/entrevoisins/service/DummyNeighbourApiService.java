@@ -15,6 +15,7 @@ import static android.support.constraint.Constraints.TAG;
 public class DummyNeighbourApiService implements  NeighbourApiService {
 
     private List<Neighbour> neighbours = DummyNeighbourGenerator.generateNeighbours();
+    private Neighbour theNeighbour;
 
     /**
      * {@inheritDoc}
@@ -49,7 +50,26 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
             if (neighbour.getFavOrNot())
                 favoriteList.add(neighbour);
         }
-        Log.d(TAG, "getFavoriteNeighbours: favListSize = " + favoriteList.size());
         return favoriteList;
+    }
+
+    @Override
+    public void setNeighbourFav(long neighbourID){
+        for(Neighbour neighbour : neighbours){
+            if(neighbour.getId() == neighbourID && neighbour.getFavOrNot() == false)
+                neighbour.setFavOrNot(true);
+            else
+                neighbour.setFavOrNot(false);
+        }
+    }
+
+    @Override
+    public Neighbour getTheNeighbour(long ID) {
+        for (Neighbour neighbour : neighbours){
+            if (neighbour.getId() == ID)
+                theNeighbour = new Neighbour(ID, neighbour.getName(), neighbour.getAvatarUrl(), neighbour.getAddress(), neighbour.getPhoneNumber(),
+                        neighbour.getAboutMe(), neighbour.getFavOrNot());
+        }
+        return theNeighbour;
     }
 }

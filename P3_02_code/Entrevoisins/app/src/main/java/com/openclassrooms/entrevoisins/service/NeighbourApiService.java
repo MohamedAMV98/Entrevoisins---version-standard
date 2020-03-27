@@ -33,6 +33,10 @@ public interface NeighbourApiService {
      */
 
 
+    void setNeighbourFav(long neighbourId);
+
     List<Neighbour> getFavoriteNeighbours();
+
+    Neighbour getTheNeighbour(long ID);
 
 }

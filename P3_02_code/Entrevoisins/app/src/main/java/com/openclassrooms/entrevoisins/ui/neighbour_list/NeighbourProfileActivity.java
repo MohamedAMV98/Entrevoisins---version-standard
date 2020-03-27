@@ -54,23 +54,15 @@ public class NeighbourProfileActivity extends AppCompatActivity {
     public static String EXTRA_URL = "url";
     public static String EXTRA_MOBILE = "mobile";
     public static String EXTRA_ADRESS = "adress";
-    public static String EXTRA_ID = "id";
     public static String EXTRA_ABOUTME = "aboutMe";
     public static String EXTRA_FAV = "favornot";
-    String TAG = "dsqsd";
-    private static long IDneighbour;
-    private static String neighbourName;
-    private static String neighbourUrl;
-    private static String neighbourMobile;
-    private static String neighbourAdress;
-    private static String neighbourAboutme;
     private static boolean favOrNot;
 
-    Neighbour theNeighbour;
 
     private String facebookText;
     private String originalUrl;
     private String newUrl;
+    private long ID;
     NeighbourApiService mApiService;
 
     @Override
@@ -96,15 +88,8 @@ public class NeighbourProfileActivity extends AppCompatActivity {
         name2.setText(goProfile.getStringExtra(EXTRA_NAME));
         adress.setText(goProfile.getStringExtra(EXTRA_ADRESS));
         mobile.setText(goProfile.getStringExtra(EXTRA_MOBILE));
-        // Save neighbour's data in variables for generating a new Neighbour and saving it in favorite list
-        IDneighbour = goProfile.getLongExtra(EXTRA_ID, 0);
-        neighbourName = goProfile.getStringExtra(EXTRA_NAME);
-        neighbourUrl = goProfile.getStringExtra(EXTRA_URL);
-        neighbourAdress = goProfile.getStringExtra(EXTRA_ADRESS);
-        neighbourMobile = goProfile.getStringExtra(EXTRA_MOBILE);
-        neighbourAboutme = goProfile.getStringExtra(EXTRA_ABOUTME);
         favOrNot = goProfile.getBooleanExtra(EXTRA_FAV, false);
-        theNeighbour = new Neighbour(IDneighbour, neighbourName, neighbourUrl, neighbourAdress, neighbourMobile, neighbourAboutme, favOrNot);
+        ID = goProfile.getLongExtra("id", 0);
 
         /**
          * Get neighbour's name and lowercase it then display it
@@ -120,11 +105,14 @@ public class NeighbourProfileActivity extends AppCompatActivity {
         newUrl = originalUrl.replace("150", "500");
         Picasso.get().load(newUrl).into(avatarProfile);
 
-        if(theNeighbour.getFavOrNot()) {
+        if (mApiService.getFavoriteNeighbours().contains(mApiService.getTheNeighbour(ID))) {
             fav.setImageResource(R.drawable.ic_star_white_24dp);
-        }else
-            fav.setImageResource(R.drawable.ic_star_border_white_24dp);
-
+            favOrNot = true;
+        }
+        else{
+                fav.setImageResource(R.drawable.ic_star_border_white_24dp);
+                favOrNot = false;
+            }
     }
 
     @OnClick(R.id.backButton)
@@ -139,19 +127,16 @@ public class NeighbourProfileActivity extends AppCompatActivity {
     
     @OnClick(R.id.favButton)
     public void changeStar() {
-        if(!theNeighbour.getFavOrNot()){
-            theNeighbour.setFavOrNot(true);
-            //mApiService.getNeighbours().get((int) ((theNeighbour.getId()) - 1)).setFavOrNot(true);
-            Log.d(TAG, "changeStar: setfav = " + theNeighbour.getFavOrNot());
-            fav.setImageResource(R.drawable.ic_star_white_24dp);
+        if(favOrNot){
+            mApiService.setNeighbourFav(ID);
+            fav.setImageResource(R.drawable.ic_star_border_white_24dp);
+            favOrNot = false;
         }
         else {
-            //mApiService.getNeighbours().get((int) ((theNeighbour.getId()) - 1)).setFavOrNot(false);
-            theNeighbour.setFavOrNot(false);
-            Log.d(TAG, "changeStar: setunfav = " + theNeighbour.getFavOrNot());
-            fav.setImageResource(R.drawable.ic_star_border_white_24dp);
+            mApiService.setNeighbourFav(ID);
+            fav.setImageResource(R.drawable.ic_star_white_24dp);
+            favOrNot = true;
         }
-
     }
 
 }

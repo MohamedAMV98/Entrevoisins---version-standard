@@ -30,9 +30,9 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                return AllinOneFragment.newInstance(mApiService.getNeighbours());
+                return AllinOneFragment.newInstance(false);
             case 1:
-                return AllinOneFragment.newInstance(mApiService.getFavoriteNeighbours());
+                return AllinOneFragment.newInstance(true);
         }
         return null;
     }

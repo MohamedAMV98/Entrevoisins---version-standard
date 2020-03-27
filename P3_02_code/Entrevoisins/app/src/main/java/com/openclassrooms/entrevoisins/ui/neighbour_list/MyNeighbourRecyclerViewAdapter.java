@@ -77,7 +77,7 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
             public void onClick(View v) {
                 Intent goProfile = new Intent(v.getContext(), NeighbourProfileActivity.class);
                 goProfile.putExtra(NeighbourProfileActivity.EXTRA_ABOUTME, neighbour.getAboutMe());
-                goProfile.putExtra(NeighbourProfileActivity.EXTRA_ID, neighbour.getId());
+                goProfile.putExtra("id", neighbour.getId());
                 goProfile.putExtra(NeighbourProfileActivity.EXTRA_NAME, neighbour.getName());
                 goProfile.putExtra(NeighbourProfileActivity.EXTRA_ADRESS, neighbour.getAddress());
                 goProfile.putExtra(NeighbourProfileActivity.EXTRA_MOBILE, neighbour.getPhoneNumber());
