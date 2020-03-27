@@ -36,15 +36,16 @@ public class AllinOneFragment extends Fragment {
 
     private NeighbourApiService mApiService;
     private RecyclerView mRecyclerView;
-    public List<Neighbour> mNeighbours;
+    public List<Neighbour> mNeighbours = new ArrayList<>();
     public static final String BOOL = "bool";
     boolean isBool;
 
-    public static AllinOneFragment newInstance(boolean whichTab) {
+    public static AllinOneFragment newInstance(List<Neighbour> theList) {
         AllinOneFragment fragment = new AllinOneFragment();
-        Bundle bd =  new Bundle();
+        /*Bundle bd =  new Bundle();
         bd.putBoolean(BOOL, whichTab);
-        fragment.setArguments(bd);
+        fragment.setArguments(bd);*/
+        fragment.mNeighbours = theList;
         return fragment;
     }
 
@@ -52,13 +53,10 @@ public class AllinOneFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApiService = DI.getNeighbourApiService();
-        if(getArguments()!= null) {
+        /*if (getArguments() != null) {
             isBool = getArguments().getBoolean(BOOL);
-            if (getArguments().getBoolean(BOOL))
-                mNeighbours = mApiService.getFavoriteNeighbours();
-            else
-                mNeighbours = mApiService.getNeighbours();
-        }
+        }*/
+        initList(mNeighbours);
     }
 
     @Override
@@ -75,13 +73,17 @@ public class AllinOneFragment extends Fragment {
     /**
      * Init the List of neighbours depending on boolean variable getWhichTab
      */
-    private void initList() {
-        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mNeighbours, isBool));
+    private void initList(List<Neighbour> aList) {
+        /*if (bool)
+            mNeighbours = mApiService.getFavoriteNeighbours();
+        else
+            mNeighbours = mApiService.getNeighbours();*/
+        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(aList, isBool));
     }
 
     @Override
     public void onResume() {
-        initList();
+        initList(mNeighbours);
         super.onResume();
     }
 
@@ -105,11 +107,7 @@ public class AllinOneFragment extends Fragment {
     public void onDeleteNeighbour(DeleteNeighbourEvent event) {
         if(isBool) {
             mApiService.deleteNeighbour(event.neighbour);
-            initList();
-        }
-        else {
-            mApiService.deleteFavNeighbour(event.neighbour);
-            initList();
+            initList(mNeighbours);
         }
     }
 }

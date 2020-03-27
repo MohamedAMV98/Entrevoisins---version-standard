@@ -32,9 +32,7 @@ public interface NeighbourApiService {
      * Get favorite list
      */
 
-    void createFavoriteNeighbour(Neighbour neighbour);
 
     List<Neighbour> getFavoriteNeighbours();
 
-    void deleteFavNeighbour(Neighbour neighbour);
 }

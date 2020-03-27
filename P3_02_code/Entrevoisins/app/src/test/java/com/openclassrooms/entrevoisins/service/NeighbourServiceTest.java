@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -34,13 +35,6 @@ public class NeighbourServiceTest {
         List<Neighbour> neighbours = service.getNeighbours();
         List<Neighbour> expectedNeighbours = DummyNeighbourGenerator.DUMMY_NEIGHBOURS;
         assertThat(neighbours, IsIterableContainingInAnyOrder.containsInAnyOrder(expectedNeighbours.toArray()));
-    }
-
-    @Test
-    public void deleteNeighbourWithSuccess() {
-        Neighbour neighbourToDelete = service.getNeighbours().get(0);
-        service.deleteNeighbour(neighbourToDelete);
-        assertFalse(service.getNeighbours().contains(neighbourToDelete));
     }
 
     // TEST ADDED
@@ -69,5 +63,12 @@ public class NeighbourServiceTest {
         // CHECK IF NEIGHBOUR IS REMOVED
         service.deleteFavNeighbour(neighbourToAddToFavorite);
         assertFalse(service.getFavoriteNeighbours().contains(neighbourToAddToFavorite));
+    }
+
+    @Test
+    public void deleteNeighbourWithSuccess() {
+        Neighbour neighbourToDelete = service.getNeighbours().get(0);
+        service.deleteNeighbour(neighbourToDelete);
+        assertFalse(service.getNeighbours().contains(neighbourToDelete));
     }
 }

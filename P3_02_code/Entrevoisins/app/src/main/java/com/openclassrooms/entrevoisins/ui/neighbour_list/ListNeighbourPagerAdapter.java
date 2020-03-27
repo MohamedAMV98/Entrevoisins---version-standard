@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.service.NeighbourApiService;
+
 
 public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
@@ -21,13 +24,15 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
      * @return
      */
 
+    NeighbourApiService mApiService = DI.getNeighbourApiService();
+
     @Override
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                return AllinOneFragment.newInstance(false);
+                return AllinOneFragment.newInstance(mApiService.getNeighbours());
             case 1:
-                return AllinOneFragment.newInstance(true);
+                return AllinOneFragment.newInstance(mApiService.getFavoriteNeighbours());
         }
         return null;
     }

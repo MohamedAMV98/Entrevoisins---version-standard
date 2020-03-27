@@ -28,6 +28,9 @@ public class Neighbour {
     /** About me */
     private String aboutMe;
 
+    /** Favorite or Not*/
+    private boolean favOrNot;
+
     /**
      * Constructor
      * @param id
@@ -35,13 +38,22 @@ public class Neighbour {
      * @param avatarUrl
      */
     public Neighbour(long id, String name, String avatarUrl, String address,
-                     String phoneNumber, String aboutMe) {
+                     String phoneNumber, String aboutMe, boolean favOrNot) {
         this.id = id;
         this.name = name;
         this.avatarUrl = avatarUrl;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
+        this.favOrNot = favOrNot;
+    }
+
+    public boolean getFavOrNot() {
+        return favOrNot;
+    }
+
+    public void setFavOrNot(boolean favOrNot) {
+        this.favOrNot = favOrNot;
     }
 
     public long getId() {

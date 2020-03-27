@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.FloatingActionButton;
 import android.widget.ImageView;
@@ -55,12 +56,17 @@ public class NeighbourProfileActivity extends AppCompatActivity {
     public static String EXTRA_ADRESS = "adress";
     public static String EXTRA_ID = "id";
     public static String EXTRA_ABOUTME = "aboutMe";
+    public static String EXTRA_FAV = "favornot";
+    String TAG = "dsqsd";
     private static long IDneighbour;
     private static String neighbourName;
     private static String neighbourUrl;
     private static String neighbourMobile;
     private static String neighbourAdress;
     private static String neighbourAboutme;
+    private static boolean favOrNot;
+
+    Neighbour theNeighbour;
 
     private String facebookText;
     private String originalUrl;
@@ -97,6 +103,8 @@ public class NeighbourProfileActivity extends AppCompatActivity {
         neighbourAdress = goProfile.getStringExtra(EXTRA_ADRESS);
         neighbourMobile = goProfile.getStringExtra(EXTRA_MOBILE);
         neighbourAboutme = goProfile.getStringExtra(EXTRA_ABOUTME);
+        favOrNot = goProfile.getBooleanExtra(EXTRA_FAV, false);
+        theNeighbour = new Neighbour(IDneighbour, neighbourName, neighbourUrl, neighbourAdress, neighbourMobile, neighbourAboutme, favOrNot);
 
         /**
          * Get neighbour's name and lowercase it then display it
@@ -112,16 +120,16 @@ public class NeighbourProfileActivity extends AppCompatActivity {
         newUrl = originalUrl.replace("150", "500");
         Picasso.get().load(newUrl).into(avatarProfile);
 
-        if(mApiService.getFavoriteNeighbours().contains(new Neighbour(IDneighbour, neighbourName, neighbourUrl, neighbourAdress, neighbourMobile, neighbourAboutme))) {
+        if(theNeighbour.getFavOrNot()) {
             fav.setImageResource(R.drawable.ic_star_white_24dp);
-        }
+        }else
+            fav.setImageResource(R.drawable.ic_star_border_white_24dp);
 
     }
 
     @OnClick(R.id.backButton)
     public void backToList() {
-        Intent backToList = new Intent(this, ListNeighbourActivity.class);
-        startActivity(backToList);
+        finish();
     }
 
     /**
@@ -131,14 +139,17 @@ public class NeighbourProfileActivity extends AppCompatActivity {
     
     @OnClick(R.id.favButton)
     public void changeStar() {
-        Neighbour actualNeighbour = new Neighbour(IDneighbour, neighbourName, neighbourUrl, neighbourAdress, neighbourMobile, neighbourAboutme);
-        if(!mApiService.getFavoriteNeighbours().contains(actualNeighbour)) {
+        if(!theNeighbour.getFavOrNot()){
+            theNeighbour.setFavOrNot(true);
+            //mApiService.getNeighbours().get((int) ((theNeighbour.getId()) - 1)).setFavOrNot(true);
+            Log.d(TAG, "changeStar: setfav = " + theNeighbour.getFavOrNot());
             fav.setImageResource(R.drawable.ic_star_white_24dp);
-            mApiService.createFavoriteNeighbour(actualNeighbour);
         }
         else {
+            //mApiService.getNeighbours().get((int) ((theNeighbour.getId()) - 1)).setFavOrNot(false);
+            theNeighbour.setFavOrNot(false);
+            Log.d(TAG, "changeStar: setunfav = " + theNeighbour.getFavOrNot());
             fav.setImageResource(R.drawable.ic_star_border_white_24dp);
-            mApiService.deleteFavNeighbour(actualNeighbour);
         }
 
     }
