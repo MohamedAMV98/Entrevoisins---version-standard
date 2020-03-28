@@ -6,6 +6,7 @@ import com.openclassrooms.entrevoisins.model.Neighbour;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -43,6 +44,9 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
     }
 
 
+    // AJOUT POUR RÉVISION DU CODE APRÈS SOUTENANCE
+
+
     @Override
     public List<Neighbour> getFavoriteNeighbours() {
         List<Neighbour> favoriteList = new ArrayList<>();
@@ -56,9 +60,15 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
     @Override
     public void setNeighbourFav(long neighbourID){
         for(Neighbour neighbour : neighbours){
-            if(neighbour.getId() == neighbourID && neighbour.getFavOrNot() == false)
+            if(neighbour.getId() == neighbourID)
                 neighbour.setFavOrNot(true);
-            else
+        }
+    }
+
+    @Override
+    public void setNeighbourUnfav(long neighbourID){
+        for(Neighbour neighbour : neighbours){
+            if(neighbour.getId() == neighbourID)
                 neighbour.setFavOrNot(false);
         }
     }

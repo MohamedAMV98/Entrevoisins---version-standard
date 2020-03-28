@@ -42,26 +42,27 @@ public class NeighbourServiceTest {
     @Test
     public void addNeighbourWithSuccess(){
         Neighbour neighbourToAdd = new Neighbour(13, "Jean", "https://i.pravatar.cc/150?u=a042581f4e29026703b",
-                "24 Rue Jules Guérin", "07 61 77 66 33", "this is me");
+                "24 Rue Jules Guérin", "07 61 77 66 33", "this is me", false);
         service.createNeighbour(neighbourToAdd);
         assertTrue(service.getNeighbours().contains(neighbourToAdd));
     }
 
     @Test
     public void addNeighbourToFavoriteWithSuccess(){
-        Neighbour neighbourToAddToFavorite = service.getNeighbours().get(0);
-        service.createFavoriteNeighbour(neighbourToAddToFavorite);
-        assertTrue(service.getFavoriteNeighbours().contains(neighbourToAddToFavorite));
+        Long id = service.getNeighbours().get(0).getId();
+        service.setNeighbourFav(id);
+        assertTrue(service.getFavoriteNeighbours().contains(service.getTheNeighbour(id)));
     }
 
     @Test
     public void removeNeighbourFromFavoriteList(){
-        Neighbour neighbourToAddToFavorite = service.getNeighbours().get(0);
+        Long id = service.getNeighbours().get(2).getId();
+        Neighbour neighbourToAddToFavorite = service.getNeighbours().get(2);
         // CHECK IF NEIGHBOUR IS ADDED THEN WE CAN REMOVE IT
-        service.createFavoriteNeighbour(neighbourToAddToFavorite);
+        service.setNeighbourFav(id);
         assertTrue(service.getFavoriteNeighbours().contains(neighbourToAddToFavorite));
         // CHECK IF NEIGHBOUR IS REMOVED
-        service.deleteFavNeighbour(neighbourToAddToFavorite);
+        service.deleteNeighbour(neighbourToAddToFavorite);
         assertFalse(service.getFavoriteNeighbours().contains(neighbourToAddToFavorite));
     }
 

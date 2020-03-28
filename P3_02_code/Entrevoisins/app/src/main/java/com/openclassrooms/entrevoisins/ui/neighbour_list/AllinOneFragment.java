@@ -37,8 +37,7 @@ public class AllinOneFragment extends Fragment {
     private NeighbourApiService mApiService;
     private RecyclerView mRecyclerView;
     public List<Neighbour> mNeighbours = new ArrayList<>();
-    public static final String BOOL = "bool";
-    boolean isBool = true;
+    boolean isBool;
 
     public static AllinOneFragment newInstance(boolean bool) {
         AllinOneFragment fragment = new AllinOneFragment();

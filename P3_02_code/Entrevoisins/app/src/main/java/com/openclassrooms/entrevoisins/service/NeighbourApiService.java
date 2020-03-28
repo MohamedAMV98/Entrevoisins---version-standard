@@ -39,4 +39,6 @@ public interface NeighbourApiService {
 
     Neighbour getTheNeighbour(long ID);
 
+    void setNeighbourUnfav(long neighbourID);
+
 }

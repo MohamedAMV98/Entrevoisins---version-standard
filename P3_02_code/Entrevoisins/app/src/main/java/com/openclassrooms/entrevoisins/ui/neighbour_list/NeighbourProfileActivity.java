@@ -57,8 +57,6 @@ public class NeighbourProfileActivity extends AppCompatActivity {
     public static String EXTRA_ABOUTME = "aboutMe";
     public static String EXTRA_FAV = "favornot";
     private static boolean favOrNot;
-
-
     private String facebookText;
     private String originalUrl;
     private String newUrl;
@@ -105,14 +103,15 @@ public class NeighbourProfileActivity extends AppCompatActivity {
         newUrl = originalUrl.replace("150", "500");
         Picasso.get().load(newUrl).into(avatarProfile);
 
+        // CHECK IF NEIGHBOUR IS FAVORITE OR NOT TO FILL OR NOT THE STAR
+
         if (mApiService.getFavoriteNeighbours().contains(mApiService.getTheNeighbour(ID))) {
             fav.setImageResource(R.drawable.ic_star_white_24dp);
             favOrNot = true;
+        } else{
+            fav.setImageResource(R.drawable.ic_star_border_white_24dp);
+            favOrNot = false;
         }
-        else{
-                fav.setImageResource(R.drawable.ic_star_border_white_24dp);
-                favOrNot = false;
-            }
     }
 
     @OnClick(R.id.backButton)
@@ -128,7 +127,7 @@ public class NeighbourProfileActivity extends AppCompatActivity {
     @OnClick(R.id.favButton)
     public void changeStar() {
         if(favOrNot){
-            mApiService.setNeighbourFav(ID);
+            mApiService.setNeighbourUnfav(ID);
             fav.setImageResource(R.drawable.ic_star_border_white_24dp);
             favOrNot = false;
         }
